@@ -3,7 +3,7 @@ var mymap = L.map("map", {
     center: [6.794952075439587, 20.91148703911037], 
     zoom: 3});
 
-
+// Set up baselayers
 var streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2NoYXVkaHVyaSIsImEiOiJjazBtcG5odG8wMDltM2JtcjdnYTgyanBnIn0.qwqjMomdrBMG36GQKXBlMw', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -19,14 +19,8 @@ var grayscale = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}
     tileSize: 512,
     zoomOffset: -1
 }).addTo(mymap);
-   
-var myIcon = L.icon({
-    iconUrl: 'images/icon_640.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
-});
 
+//Set up icon variables
 var myIcon1 = L.icon({
     iconUrl: 'images/icon_1.png',
     iconSize: [30, 30],
@@ -95,7 +89,7 @@ var tajPopup = "Taj Mahal, India <br/><img src='https://upload.wikimedia.org/wik
 var customOptions ={'maxWidth': '150','className' : 'custom'};
 
           
-            // Data points
+// Data points
 coords = [
     [40.43208734303398, 116.570439270903],
     [41.89040186252818, 12.492252355598225],
@@ -106,7 +100,7 @@ coords = [
     [27.175354762373193, 78.04214219760772]
 ];
 
-//Marker Layergroup
+// Marker Layergroup
 var loc = L.layerGroup();
 L.marker(coords[0], {icon: myIcon1}).bindPopup(greatwallPopup, customOptions).addTo(loc);
 L.marker(coords[1], {icon: myIcon2}).bindPopup(coloPopup, customOptions).addTo(loc);
@@ -118,15 +112,15 @@ L.marker(coords[6], {icon: myIcon7}).bindPopup(tajPopup, customOptions).addTo(lo
 loc.addTo(mymap);
 
 
-// Line
+// Add Line
 var line = L.polyline(coords, {color: "red", weight: 7}).bindPopup("Travel Path");
 line.addTo(mymap);
 
-////////scalebar//////   
+// Add a scalebar 
 L.control.scale({position: 'bottomright', maxWidth: '150', metric: 'True'}).addTo(mymap);
 
 
-// Creating menu items
+// Create menu items
 var baseLayers = {
     'Grayscale': grayscale,
     'Streets': streets,
@@ -137,7 +131,7 @@ var overlays = {
     'Travel Path': line,
 };
 
-//Creating the menu
+//Create the menu window
 var layerControl = L.control.layers(baseLayers, overlays, {collapsed: false}).addTo(mymap); //collapsed: true is defaults
 
 //Create locator map
@@ -148,10 +142,10 @@ var miniMap = new L.Control.MiniMap(L.tileLayer('https://api.maptiler.com/maps/t
 }).addTo(mymap);
 
 //Pop-up for showing XY coordinates on map
-// Create an empty popup
+//// Create an empty popup
 var popup = L.popup();
             
-// Function to set popup contents
+//// Function to set popup contents
 function onMapClick(e) {
     popup
         .setLatLng(e.latlng)
@@ -161,10 +155,10 @@ function onMapClick(e) {
         "<b>lat:</b> " + e.latlng.lat
     ).openOn(mymap);}
 
-// Add event listener for click events to show lat long on the map
+//// Add event listener for click events to show lat long on the map
 mymap.addEventListener("click", onMapClick);
 
-//Place Buttons on map
+// Add Navigation Buttons
 L.easyButton(('1 height=50%'), function(btn, map){
     map.setView(coords[0], 15);
 }).addTo(mymap);
@@ -191,7 +185,7 @@ L.easyButton(('<img src="images/globe_icon.png", height=85%>'), function(btn, ma
     map.setView([6.794952075439587, 20.91148703911037], 3);
 }).addTo(mymap);
 
-// Making International Space Station marker with a custom icon
+// Make International Space Station (ISS) marker with a custom icon
   var issIcon = L.icon({
     iconUrl: 'images/iss200.png',
     iconSize: [80, 52],
@@ -199,15 +193,18 @@ L.easyButton(('<img src="images/globe_icon.png", height=85%>'), function(btn, ma
   });
   var marker = L.marker([0, 0], {icon: issIcon}).addTo(mymap);
 
+// Call the ISS real time data URL
   var api_url = 'https://api.wheretheiss.at/v1/satellites/25544';
 
   var firstTime = true;
 
+// Update the Lat/long based on the updated reading everytime
   async function getISS() {
     var response = await fetch(api_url);
     var data = await response.json();
     var { latitude, longitude } = data;
 
+// Change the marker location based on the updated reading but keep the map view in default center
     marker.setLatLng([latitude, longitude]);
     if (firstTime) {
       mymap.setView([6.794952075439587, 20.91148703911037], 3);
