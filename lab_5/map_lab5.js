@@ -218,6 +218,6 @@ L.easyButton(('<img src="images/globe_icon.png", height=85%>'), function(btn, ma
 
   setInterval(getISS, 1000);
 
-L.easyButton(('<img src="images/iss200.png", height=85%>'), function(btn, map){
-    map.setView([latitude, longitude]);
+L.easyButton(('<img src="images/iss200.png", height=60%>'), function(btn, map){
+    map.setView([latitude, longitude], 9);
 }).addTo(mymap);
