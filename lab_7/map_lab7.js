@@ -120,6 +120,8 @@ var searchControl = new L.Control.Search({
     position:'topright',
     layer: peaks,
     propertyName: 'TITLE',
+    marker: false,
+    markeranimate: true,
     delayType: 50,
     collapsed: false,
     textPlaceholder: 'Search by Peak Name: e.g. Everest, Lhotse',   //placeholder value
