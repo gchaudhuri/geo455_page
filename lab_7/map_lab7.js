@@ -19,7 +19,7 @@ streets.addTo(mymap);
 
 var myIcon = new L.Icon({
      iconSize: [20, 20],
-     iconAnchor: [13, 27],
+     iconAnchor: [10, 15],
      popupAnchor:  [1, -24],
      iconUrl: 'peaks.png'
  });
@@ -120,8 +120,6 @@ var searchControl = new L.Control.Search({
     position:'topright',
     layer: peaks,
     propertyName: 'TITLE',
-    marker: false,
-    markeranimate: true,
     delayType: 50,
     collapsed: false,
     textPlaceholder: 'Search by Peak Name: e.g. Everest, Lhotse',   //placeholder value
