@@ -46,7 +46,8 @@ function getRadius(area) {
 
 var propcircles = new L.geoJson(mtn_peaks, {
     onEachFeature: function(feature, featureLayer){
-        featureLayer.bindPopup('<p>Number of Expeditions: '+feature.properties.number_of1+'</p>');
+        featureLayer.bindPopup('<p>Peak Name: <b>'+feature.properties.TITLE+ '</b></br>' +
+			       'Number of Expeditions: '+feature.properties.number_of1+'</p>');
     },
     pointToLayer: function(feature, latlng) {
       return L.circleMarker(latlng, {
