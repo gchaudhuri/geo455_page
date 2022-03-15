@@ -137,7 +137,6 @@ var layerControl = L.control.layers(baseLayers, overlays, {collapsed: false}).ad
 //Create locator map
 var miniMap = new L.Control.MiniMap(L.tileLayer('https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=tZnptaeI9RvKHsX18rbW'), {
     toggleDisplay: true,
-    minimized: true,
     position: 'bottomleft'
 }).addTo(mymap);
 
