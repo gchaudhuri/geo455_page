@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 var mymap = L.map('map', {
     center: [38.85250119246977, -99.60815961021089],
-              zoom: 5,
+              zoom: 4,
           });
     
  var grayscale = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
