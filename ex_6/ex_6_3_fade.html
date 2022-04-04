@@ -1,0 +1,51 @@
+<html>
+   <head>
+      <title>Ex- 6-2: CSS manipulation</title>
+       <style>
+           .charac {
+               float: left;
+           }
+           img {
+              width: 200px; 
+               height: 200px; 
+           }
+      </style>
+    </head>
+      <script type = "text/javascript" 
+         src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+      </script>
+
+      <script>
+          
+       /*$(document).ready(function() {
+              $("img").click(function(){
+                  $(this).hide();
+              });
+          }); */
+          
+          $(document).ready(function() {
+              $("button").click(function(){
+                  $("#normal").fadeToggle();
+                  $("#fast").fadeToggle("fast");
+                  $("#slow").fadeToggle("slow");
+                  $("#very-slow").fadeToggle(2000);
+              });
+          });
+          
+
+      </script>
+
+	
+   <body>
+       <h1> Adventures of Tintin </h1>
+       <p> Main Characters </p>
+       <div class= "charac">
+           <img id="normal" src="img/tintin-milou.jpg"> <br>
+           <img id="fast" src="img/captain-haddock_v2.jpg"> <br>
+           <img id="slow" src="img/prof_calcu.jpg"> <br>
+           <img id="very-slow" src="img/Thomson_&_Thompson.png"> <br>
+       </div>
+       
+       <button>Fade Toggle</button>
+   </body>
+</html>

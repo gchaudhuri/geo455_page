@@ -1,0 +1,36 @@
+<html>
+   <head>
+      <title>Ex- 6-1: DOM manipulation</title>
+      <script type = "text/javascript" 
+         src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+      </script>
+
+      <script type = "text/javascript" language = "javascript">
+         $(document).ready(function() {
+            $("p:first").css('background-color', 'yellow');
+         });
+        $(document).ready(function() {//open console and copy-paste the the code below//
+                $("ul").text();
+            });          
+        $(document).ready(function() {
+            $("button").click(function(){
+                $("ul").css('color', 'red');
+            });
+         });
+      </script>
+   </head>
+	
+   <body>
+       <h1> Webmapping </h1>
+       <p> Technologies we learned </p>
+       <ul>
+           <li> HTML </li>
+           <li> CSS </li>
+           <li> JavaScript </li>
+           <li> jQuery </li>
+       </ul>
+       
+       <p id="test">Check console to get the text for list</p> 
+       <button>Change list text color</button>
+    </body>
+</html>

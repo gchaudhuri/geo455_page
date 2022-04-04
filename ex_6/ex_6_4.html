@@ -1,0 +1,48 @@
+<html>
+   <head>
+      <title>Ex- 6-2: CSS manipulation</title>
+       <style>
+           img {
+               position: relative;
+               width: 200px; 
+               height: 200px; 
+           }
+      </style>
+    </head>
+      <script type = "text/javascript" 
+         src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+      </script>
+
+      <script>
+          
+       /*$(document).ready(function() {
+              $("img").click(function(){
+                  $(this).hide();
+              });
+          }); */
+          
+          $(document).ready(function() {
+              $("#button").click(function(){
+                  $("img").animate({left: '750px'});
+            });
+          });
+            
+          
+
+      </script>
+
+	
+   <body>
+       <button id="button">Go</button>
+       <h1> Adventures of Tintin </h1>
+       <p> Main Characters </p>
+       <div>
+           <img src="img/tintin-milou.jpg"> <br>
+           <img src="img/captain-haddock_v2.jpg"> <br>
+           <img src="img/prof_calcu.jpg"> <br>
+           <img src="img/Thomson_&_Thompson.png"> <br>
+       </div>
+       
+
+   </body>
+</html>
