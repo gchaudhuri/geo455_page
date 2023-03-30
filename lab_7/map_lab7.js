@@ -21,7 +21,7 @@ var myIcon = new L.Icon({
      iconSize: [20, 20],
      iconAnchor: [10, 15],
      popupAnchor:  [1, -24],
-     iconUrl: 'images/peaks.png'
+     iconUrl: 'peaks.png'
  });
 
 
@@ -137,10 +137,10 @@ mymap.addControl(searchControl);  //inizialize search control
 
 
 var overlayMaps = {
-    "<img src='images/peaks.png' height=16> Location of Himalayan Peaks": peaks,
-    "<img src='images/propcircles.png' height=16> Expeditions Proportional Circles": propcircles,
-    "<img src='images/dead.jpg' height=16> Death Density Heat Map": heat,
-    "<img src='images/cluster_icon.png' height=16> Clustering of Peaks": clustermarkers,
+    "<img src='peaks.png' height=16> Location of Himalayan Peaks": peaks,
+    "<img src='propcircles.png' height=16> Expeditions Proportional Circles": propcircles,
+    "<img src='dead.jpg' height=16> Death Density Heat Map": heat,
+    "<img src='cluster_icon.png' height=16> Clustering of Peaks": clustermarkers,
 };
 
 var legend = L.control.layers(overlayMaps, {}, {collapsed: false}).addTo(mymap);
