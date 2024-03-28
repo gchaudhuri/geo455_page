@@ -47,8 +47,8 @@ cities.bindPopup(function (layer) {
         );
       });
 
-var wildfireRisk = L.esri.dynamicMapLayer({
-    url: 'https://maps7.arcgisonline.com/arcgis/rest/services/USDA_USFS_2014_Wildfire_Hazard_Potential/MapServer',
+var wildfireRisk = L.esri.imageMapLayer({
+    url: 'https://apps.fs.usda.gov/fsgisx01/rest/services/RDW_Wildfire/RMRS_WRC_WildfireHazardPotential/ImageServer',
     // server response content type can be either 'json' (default) or 'image'
     f: 'image'
   }).addTo(mymap);
