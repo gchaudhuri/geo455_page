@@ -17,7 +17,19 @@ var imagery =  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
 
+/* ---------------------------------------------------------
+   5) CREATE THE MAP (after layers exist!)
+   --------------------------------------------------------- */
 
+var map = L.map("map", {
+  center: [6.794952075439587, 20.91148703911037],
+  zoom: 2,
+  layers: [streets]
+});
+
+// Save the default "home" view so we can return to it anytime
+var homeCenter = map.getCenter();
+var homeZoom = map.getZoom();
 /* ---------------------------------------------------------
    2) POPUPS (HTML strings)
    --------------------------------------------------------- */
@@ -50,9 +62,10 @@ var customOptions = { maxWidth: "150", className: "custom" };
    3) OVERLAY LAYER (LayerGroup) + DATA ARRAY
    --------------------------------------------------------- */
 
-var landmarks = L.layerGroup();
+var landmarks = L.layerGroup().addTo(map);
 
 var wonders = [
+  {name: "Great Wall of China", coords: [40.4505, 116.5490], popupHtml: greatwallPopup },
   { name: "Petra", coords: [30.3285, 35.4444], popupHtml: petraPopup },
   { name: "Colosseum", coords: [41.8902, 12.4922], popupHtml: coloPopup },
   { name: "Chichen Itza", coords: [20.6843, -88.5678], popupHtml: chichenPopup },
@@ -61,19 +74,7 @@ var wonders = [
   { name: "Christ the Redeemer", coords: [-22.9519, -43.2105], popupHtml: christPopup }
 ];
 
-/* ---------------------------------------------------------
-   5) CREATE THE MAP (after layers exist!)
-   --------------------------------------------------------- */
 
-var map = L.map("map", {
-  center: [6.794952075439587, 20.91148703911037],
-  zoom: 3,
-  layers: [natgeo, landmarks]
-});
-
-// Save the default "home" view so we can return to it anytime
-var homeCenter = map.getCenter();
-var homeZoom = map.getZoom();
 
 /* ---------------------------------------------------------
    4) FUNCTION: add markers from the data array
@@ -87,6 +88,12 @@ function addWondersToLayer(dataArray, layerGroup) {
     var marker = L.marker(feature.coords);
 
     marker.bindPopup(feature.popupHtml, customOptions);
+	    // Add a tooltip that appears on hover (no click needed)
+    marker.bindTooltip(feature.name, {
+      direction: "top",
+      sticky: true,
+      opacity: 0.9
+    });
 
 
     marker.addTo(layerGroup);
@@ -149,8 +156,8 @@ var baseLayers = {
 };
 
 var overlays = {
-  "Point Landmarks": landmarks,
-  "Line - Great Wall": lines
+  "Seven Wonders": landmarks,
+  "Great Wall": lines
 };
 
 L.control.layers(baseLayers, overlays, { collapsed: false }).addTo(map);
