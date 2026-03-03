@@ -1,218 +1,280 @@
-//Creating the map variable
-var mymap = L.map("map", {
-    center: [6.794952075439587, 20.91148703911037], 
-    zoom: 3});
+/* ---------------------------------------------------------
+   GEO 455 • Lab 5 (UPDATED)
+   Consistent with Lab 4:
+   - same basemaps (OSM streets, Physical Geography )
+   - same home button pattern (easyButton with Home icon + saved home view)
+   - same wonders data structure + addWondersToLayer() function BUT ADD ICONS 
+   - same popup style (customOptions with className: 'custom')
+   Lab 5 adds:
+   - click map -> popup lat/lon + update info panel 
+   - real-time ISS marker + 'Jump to ISS' button 
+   --------------------------------------------------------- */
 
-// Set up baselayers
-var streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2NoYXVkaHVyaSIsImEiOiJjazBtcG5odG8wMDltM2JtcjdnYTgyanBnIn0.qwqjMomdrBMG36GQKXBlMw', {
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1
-}).addTo(mymap);
+/* ---------------------------------------------------------
+   1) BASEMAPS 
+   --------------------------------------------------------- */
 
-var grayscale = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2NoYXVkaHVyaSIsImEiOiJjazBtcG5odG8wMDltM2JtcjdnYTgyanBnIn0.qwqjMomdrBMG36GQKXBlMw', {
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox/light-v9',
-    tileSize: 512,
-    zoomOffset: -1
-}).addTo(mymap);
-
-//Set up icon variables
-var myIcon1 = L.icon({
-    iconUrl: 'images/icon_1.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
+var streets = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 });
 
-var myIcon2 = L.icon({
-    iconUrl: 'images/icon_2.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
+
+// WMS basemap (imagery)
+var phyGeo =  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
+	maxZoom: 8
 });
 
-var myIcon3 = L.icon({
-    iconUrl: 'images/icon_3.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
+/* ---------------------------------------------------------
+   2) CREATE THE MAP + HOME BUTTON — same pattern as Lab 4
+   --------------------------------------------------------- */
+
+var map = L.map("map", {
+  center: [6.794952075439587, 20.91148703911037],
+  zoom: 3,
+  layers: [streets],
 });
 
-var myIcon4 = L.icon({
-    iconUrl: 'images/icon_4.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
-});
+// Save the default "home" view so we can return to it anytime
+var homeCenter = map.getCenter();
+var homeZoom = map.getZoom();
 
-var myIcon5 = L.icon({
-    iconUrl: 'images/icon_5.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
-});
+// Home button: return to default view (uses same icon approach as Lab 4)
+L.easyButton(
+  '<img src="images/globe_icon.png" height="60%"/>',
+  function () {
+    map.setView(homeCenter, homeZoom);
+  },
+  "Home"
+).addTo(map);
 
-var myIcon6 = L.icon({
-    iconUrl: 'images/icon_6.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
-});
+/* ---------------------------------------------------------
+   3) POPUPS (HTML strings) — same as Lab 4
+   --------------------------------------------------------- */
 
-var myIcon7 = L.icon({
-    iconUrl: 'images/icon_7.png',
-    iconSize: [30, 30],
-    iconAnchor: [0, 0],
-    popupAnchor: [15,10],
-});
+var greatwallPopup =
+  "Great Wall of China<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/20090529_Great_Wall_8185.jpg/256px-20090529_Great_Wall_8185.jpg' alt='Great Wall' width='150px'/>";
 
-// Create custom popups with images
-var greatwallPopup = "Great Wall of China<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/20090529_Great_Wall_8185.jpg/256px-20090529_Great_Wall_8185.jpg' alt='great wall wiki' width='150px'/>";
+var chichenPopup =
+  "Chichen-Itza, Mexico<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/003_El_Castillo_o_templo_de_Kukulkan._Chich%C3%A9n_Itz%C3%A1%2C_M%C3%A9xico._MPLC.jpg/256px-003_El_Castillo_o_templo_de_Kukulkan._Chich%C3%A9n_Itz%C3%A1%2C_M%C3%A9xico._MPLC.jpg' alt='Chichen Itza' width='150px'/>";
 
-var chichenPopup = "Chichen-Itza, Mexico<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/003_El_Castillo_o_templo_de_Kukulkan._Chich%C3%A9n_Itz%C3%A1%2C_M%C3%A9xico._MPLC.jpg/256px-003_El_Castillo_o_templo_de_Kukulkan._Chich%C3%A9n_Itz%C3%A1%2C_M%C3%A9xico._MPLC.jpg' alt='chichen-itza wiki' width='150px'/>";
+var petraPopup =
+  "Petra, Jordan<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/The_Monastery%2C_Petra%2C_Jordan8.jpg/256px-The_Monastery%2C_Petra%2C_Jordan8.jpg' alt='Petra' width='150px'/>";
 
-var petraPopup = "Petra, Jordan <br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/The_Monastery%2C_Petra%2C_Jordan8.jpg/256px-The_Monastery%2C_Petra%2C_Jordan8.jpg' alt='petra wiki', width='150px'/>";
+var machuPopup =
+  "Machu Picchu, Peru<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Machu_Picchu%2C_Peru.jpg/256px-Machu_Picchu%2C_Peru.jpg' alt='Machu Picchu' width='150px'/>";
 
-var machuPopup = "Machu Pichu, Peru <br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Machu_Picchu%2C_Peru.jpg/256px-Machu_Picchu%2C_Peru.jpg' alt='machu wiki', width='150px'/>";
+var christPopup =
+  "Christ the Redeemer, Rio de Janeiro<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Aerial_view_of_the_Statue_of_Christ_the_Redeemer.jpg/256px-Aerial_view_of_the_Statue_of_Christ_the_Redeemer.jpg' alt='Christ the Redeemer' width='150px'/>";
 
-var christPopup = "Christ the Redeemer, Rio de Janeiro <br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Aerial_view_of_the_Statue_of_Christ_the_Redeemer.jpg/256px-Aerial_view_of_the_Statue_of_Christ_the_Redeemer.jpg' alt='christ wiki', width='150px'/>";
+var coloPopup =
+  "Colosseum, Rome<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Colosseum_in_Rome-April_2007-1-_copie_2B.jpg/256px-Colosseum_in_Rome-April_2007-1-_copie_2B.jpg' alt='Colosseum' width='150px'/>";
 
-var coloPopup = "Colosseum, Rome <br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Colosseum_in_Rome-April_2007-1-_copie_2B.jpg/256px-Colosseum_in_Rome-April_2007-1-_copie_2B.jpg' alt='colo wiki', width='150px'/>";
+var tajPopup =
+  "Taj Mahal, India<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Taj-Mahal.jpg/256px-Taj-Mahal.jpg' alt='Taj Mahal' width='150px'/>";
 
-var tajPopup = "Taj Mahal, India <br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Taj-Mahal.jpg/256px-Taj-Mahal.jpg' alt='taj wiki', width='150px'/>";
+var customOptions = { maxWidth: "150", className: "custom" };
 
+/* ---------------------------------------------------------
+   4) Add data array as layer
+   --------------------------------------------------------- */
 
-var customOptions ={'maxWidth': '150','className' : 'custom'};
+var landmarks = L.layerGroup().addTo(map);
 
-          
-// Data points
-coords = [
-    [40.43208734303398, 116.570439270903],
-    [41.89040186252818, 12.492252355598225],
-    [30.328713676465735, 35.44444802834926],
-    [20.6793437423211, -88.56829451227937],
-    [-13.162932251747211, -72.54500581780444],
-    [-22.951728275037908, -43.210412100446604],
-    [27.175354762373193, 78.04214219760772]
+var wonders = [
+  { name: "Great Wall of China", coords: [40.4505, 116.549], popupHtml: greatwallPopup },
+  { name: "Petra", coords: [30.3285, 35.4444], popupHtml: petraPopup },
+  { name: "Colosseum", coords: [41.8902, 12.4922], popupHtml: coloPopup },
+  { name: "Chichen Itza", coords: [20.6843, -88.5678], popupHtml: chichenPopup },
+  { name: "Machu Picchu", coords: [-13.1631, -72.545], popupHtml: machuPopup },
+  { name: "Taj Mahal", coords: [27.1751, 78.0421], popupHtml: tajPopup },
+  { name: "Christ the Redeemer", coords: [-22.9519, -43.2105], popupHtml: christPopup },
 ];
 
-// Marker Layergroup
-var loc = L.layerGroup();
-L.marker(coords[0], {icon: myIcon1}).bindPopup(greatwallPopup, customOptions).addTo(loc);
-L.marker(coords[1], {icon: myIcon2}).bindPopup(coloPopup, customOptions).addTo(loc);
-L.marker(coords[2], {icon: myIcon3}).bindPopup(petraPopup, customOptions).addTo(loc);
-L.marker(coords[3], {icon: myIcon4}).bindPopup(chichenPopup, customOptions).addTo(loc);
-L.marker(coords[4], {icon: myIcon5}).bindPopup(machuPopup, customOptions).addTo(loc);
-L.marker(coords[5], {icon: myIcon6}).bindPopup(christPopup, customOptions).addTo(loc);
-L.marker(coords[6], {icon: myIcon7}).bindPopup(tajPopup, customOptions).addTo(loc);
-loc.addTo(mymap);
+/* ---------------------------------------------------------
+   5) FUNCTION: add markers from the data array
+   --------------------------------------------------------- */
+var iconFiles = [
+  "images/icon_1.png",
+  "images/icon_2.png",
+  "images/icon_3.png",
+  "images/icon_4.png",
+  "images/icon_5.png",
+  "images/icon_6.png",
+  "images/icon_7.png",
+];
+
+var wonderIcons = [];
+for (var i = 0; i < iconFiles.length; i++) {
+  wonderIcons.push(
+    L.icon({
+      iconUrl: iconFiles[i],
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+      popupAnchor: [0, -28],
+    })
+  );
+}
 
 
-// Add Line
-var line = L.polyline(coords, {color: "red", weight: 7}).bindPopup("Travel Path");
-line.addTo(mymap);
+function addWondersToLayer(dataArray, layerGroup, iconsArray) {
+  var markers = [];
 
-// Add a scalebar 
-L.control.scale({position: 'bottomright', maxWidth: '150', metric: 'True'}).addTo(mymap);
+  for (var i = 0; i < dataArray.length; i++) {
+    var feature = dataArray[i];
 
+    var marker = L.marker(feature.coords, { icon: iconsArray[i] })
+      .bindPopup(feature.popupHtml, customOptions)
+      .bindTooltip(feature.name, { direction: "top", sticky: true, opacity: 0.9 })
+      .addTo(layerGroup);
 
-// Create menu items
-var baseLayers = {
-    'Grayscale': grayscale,
-    'Streets': streets,
-	};
-
-var overlays = {
-    '7 Wonders of the World': loc,
-    'Travel Path': line,
-};
-
-//Create the menu window
-var layerControl = L.control.layers(baseLayers, overlays, {collapsed: false}).addTo(mymap); //collapsed: true is defaults
-
-//Create locator map
-var miniMap = new L.Control.MiniMap(L.tileLayer('https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=tZnptaeI9RvKHsX18rbW'), {
-    toggleDisplay: true,
-    position: 'bottomleft'
-}).addTo(mymap);
-
-//Pop-up for showing XY coordinates on map
-//// Create an empty popup
-var popup = L.popup();
-            
-//// Function to set popup contents
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent(
-        "You clicked the map at -<br>" + 
-        "<b>long:</b> " + e.latlng.lng + "<br>" + 
-        "<b>lat:</b> " + e.latlng.lat
-    ).openOn(mymap);}
-
-//// Add event listener for click events to show lat long on the map
-mymap.addEventListener("click", onMapClick);
-
-// Add Navigation Buttons
-L.easyButton(('1 height=50%'), function(btn, map){
-    map.setView(coords[0], 15);
-}).addTo(mymap);
-L.easyButton(('2 height=50%'), function(btn, map){
-    map.setView(coords[1], 15);
-}).addTo(mymap);
-L.easyButton(('3 height=50%'), function(btn, map){
-    map.setView(coords[2], 15);
-}).addTo(mymap);
-L.easyButton(('4 height=50%'), function(btn, map){
-    map.setView(coords[3], 15);
-}).addTo(mymap);
-L.easyButton(('5 height=50%'), function(btn, map){
-    map.setView(coords[4], 15);
-}).addTo(mymap);
-L.easyButton(('6 height=50%'), function(btn, map){
-    map.setView(coords[5], 15);
-}).addTo(mymap);
-L.easyButton(('7 height=50%'), function(btn, map){
-    map.setView(coords[6], 15);
-}).addTo(mymap);
-
-L.easyButton(('<img src="images/globe_icon.png", height=85%>'), function(btn, map){
-    map.setView([6.794952075439587, 20.91148703911037], 3);
-}).addTo(mymap);
-
-// Make International Space Station (ISS) marker with a custom icon
-  var issIcon = L.icon({
-    iconUrl: 'images/iss200.png',
-    iconSize: [80, 52],
-    iconAnchor: [25, 16]
-  });
-  var marker = L.marker([0, 0], {icon: issIcon}).addTo(mymap);
-
-// Call the ISS real time data URL
-  var api_url = 'https://api.wheretheiss.at/v1/satellites/25544';
-
-  var firstTime = true;
-
-// Update the Lat/long based on the updated reading everytime
-  async function getISS() {
-    var response = await fetch(api_url);
-    var data = await response.json();
-    var { latitude, longitude } = data;
-
-// Change the marker location based on the updated reading but keep the map view in default center
-    marker.setLatLng([latitude, longitude]);
-    if (firstTime) {
-      mymap.setView([6.794952075439587, 20.91148703911037], 3);
-      firstTime = false;
-    }
-    document.getElementById('lat').textContent = latitude.toFixed(3);
-    document.getElementById('lon').textContent = longitude.toFixed(3);
+    markers.push(marker);
   }
 
-  getISS();
+  return markers;
+}
 
-  setInterval(getISS, 1000);
+var wonderMarkers = addWondersToLayer(wonders, landmarks, wonderIcons);
+
+/* ---------------------------------------------------------
+   6) FUNCTION: add buttons to sidebar that zoom to each site 
+   --------------------------------------------------------- */
+
+// If you want to use the buttons in the sidebar instead of easyButtons, you can create them dynamically like this:
+var buttonsDiv = document.getElementById("wonder-buttons");
+var wonderZoom = 6; // pick a zoom level you like
+
+for (var i = 0; i < wonders.length; i++) {
+  (function(index) {
+    // Create a <button>
+    var btn = document.createElement("button");
+    btn.type = "button";
+
+    // If using Bootstrap, use btn classes. If not, you can use your own CSS.
+    btn.className = "btn btn-outline-secondary btn-sm text-start";
+
+    // Use the SAME icon as the marker + show name
+    btn.innerHTML =
+      '<img src="' + iconFiles[index] + '" style="width:18px;height:18px;margin-right:8px;">' +
+      wonders[index].name;
+
+    // When clicked: zoom to the location + open popup
+    btn.addEventListener("click", function() {
+      map.setView(wonders[index].coords, wonderZoom);
+      wonderMarkers[index].openPopup();
+    });
+
+    buttonsDiv.appendChild(btn);
+  })(i);
+}
+
+/* ---------------------------------------------------------
+   7) LAYER CONTROL MENU —
+   --------------------------------------------------------- */
+
+var baseLayers = {
+  "Streets Map": streets,
+  "Physical Geography": phyGeo,
+};
+
+var overlays = {
+};
+
+L.control.layers(baseLayers, overlays, { collapsed: false }).addTo(map);
+
+/* ---------------------------------------------------------
+   8) CLICK ON MAP INTERACTIVITY (Lab 5): popup + update panel 
+   --------------------------------------------------------- */
+
+// Reuse one popup object (cleaner than creating new ones each click)
+var clickPopup = L.popup();
+
+function onMapClick(e) {
+  var lat = e.latlng.lat;
+  var lon = e.latlng.lng;
+
+  // Popup at the clicked location
+  clickPopup
+    .setLatLng(e.latlng)
+    .setContent(
+      "You clicked the map at:<br>" +
+        "<b>Lat:</b> " + lat.toFixed(5) + "<br>" +
+        "<b>Lon:</b> " + lon.toFixed(5)
+    )
+    .openOn(map);
+
+  // Update the info panel
+  document.getElementById("click-lat").textContent = lat.toFixed(5);
+  document.getElementById("click-lon").textContent = lon.toFixed(5);
+}
+
+// Leaflet event API 
+map.on("click", onMapClick);
+
+/* ---------------------------------------------------------
+   9) REAL-TIME ISS (Lab 5): moving marker + jump button
+   --------------------------------------------------------- */
+
+var issIcon = L.icon({
+  iconUrl: "images/iss200.png",
+  iconSize: [80, 52],
+  iconAnchor: [25, 16],
+});
+
+var issMarker = L.marker([0, 0], { icon: issIcon }).addTo(map);
+
+// API endpoint
+var api_url = "https://api.wheretheiss.at/v1/satellites/25544";
+
+function formatTime(d) {
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
+async function getISS() {
+  try {
+    var response = await fetch(api_url);
+    if (!response.ok) throw new Error("ISS API error");
+    var data = await response.json();
+    var latitude = data.latitude;
+    var longitude = data.longitude;
+
+    issMarker.setLatLng([latitude, longitude]);
+
+    document.getElementById("lat").textContent = latitude.toFixed(3);
+    document.getElementById("lon").textContent = longitude.toFixed(3);
+    document.getElementById("iss-time").textContent = formatTime(new Date());
+  } catch (err) {
+    document.getElementById("iss-time").textContent = "ISS unavailable";
+  }
+}
+
+// Initial call + refresh
+getISS();
+setInterval(getISS, 1000);
+
+// Jump to ISS button (required feature)
+document.getElementById("btn-iss").addEventListener("click", function () {
+  var ll = issMarker.getLatLng();
+  map.setView([ll.lat, ll.lng], 4);
+});
+/* ---------------------------------------------------------
+   10) Add minimap  — use OSM tiles (no API key needed)
+   --------------------------------------------------------- */
+
+
+// MiniMap basemap (no key)
+var miniLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  minZoom: 0,
+  maxZoom: 13,
+  attribution: '&copy; OpenStreetMap'
+});
+
+// Add minimap control
+var miniMap = new L.Control.MiniMap(miniLayer, {
+  toggleDisplay: true,
+  minimized: false,
+  position: "bottomleft"
+}).addTo(map);
+
