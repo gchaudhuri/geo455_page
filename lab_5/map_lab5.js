@@ -55,25 +55,25 @@ L.easyButton(
    --------------------------------------------------------- */
 
 var greatwallPopup =
-  "Great Wall of China<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/20090529_Great_Wall_8185.jpg/256px-20090529_Great_Wall_8185.jpg' alt='Great Wall' width='150px'/>";
+  "Great Wall of China<br/><img src='https://upload.wikimedia.org/wikipedia/commons/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg' alt='Great Wall' width='150px'/>";
 
 var chichenPopup =
-  "Chichen-Itza, Mexico<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/003_El_Castillo_o_templo_de_Kukulkan._Chich%C3%A9n_Itz%C3%A1%2C_M%C3%A9xico._MPLC.jpg/256px-003_El_Castillo_o_templo_de_Kukulkan._Chich%C3%A9n_Itz%C3%A1%2C_M%C3%A9xico._MPLC.jpg' alt='Chichen Itza' width='150px'/>";
+  "Chichen-Itza, Mexico<br/><img src='https://upload.wikimedia.org/wikipedia/commons/5/51/Chichen_Itza_3.jpg' alt='Chichen Itza' width='150px'/>";
 
 var petraPopup =
-  "Petra, Jordan<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/The_Monastery%2C_Petra%2C_Jordan8.jpg/256px-The_Monastery%2C_Petra%2C_Jordan8.jpg' alt='Petra' width='150px'/>";
+  "Petra, Jordan<br/><img src='https://upload.wikimedia.org/wikipedia/commons/d/d7/Petra_Jordan_BW_43.JPG' alt='Petra' width='150px'/>";
 
 var machuPopup =
-  "Machu Picchu, Peru<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Machu_Picchu%2C_Peru.jpg/256px-Machu_Picchu%2C_Peru.jpg' alt='Machu Picchu' width='150px'/>";
+  "Machu Picchu, Peru<br/><img src='https://upload.wikimedia.org/wikipedia/commons/0/01/80_-_Machu_Picchu_-_Juin_2009_-_edit.2.jpg' alt='Machu Picchu' width='150px'/>";
 
 var christPopup =
-  "Christ the Redeemer, Rio de Janeiro<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Aerial_view_of_the_Statue_of_Christ_the_Redeemer.jpg/256px-Aerial_view_of_the_Statue_of_Christ_the_Redeemer.jpg' alt='Christ the Redeemer' width='150px'/>";
+  "Christ the Redeemer, Rio de Janeiro<br/><img src='https://upload.wikimedia.org/wikipedia/commons/e/e7/Aerial_view_of_the_Statue_of_Christ_the_Redeemer.jpg' alt='Christ the Redeemer' width='150px'/>";
 
 var coloPopup =
-  "Colosseum, Rome<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Colosseum_in_Rome-April_2007-1-_copie_2B.jpg/256px-Colosseum_in_Rome-April_2007-1-_copie_2B.jpg' alt='Colosseum' width='150px'/>";
+  "Colosseum, Rome<br/><img src='https://upload.wikimedia.org/wikipedia/commons/d/d8/Colosseum_in_Rome-April_2007-1-_copie_2B.jpg' alt='Colosseum' width='150px'/>";
 
 var tajPopup =
-  "Taj Mahal, India<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Taj-Mahal.jpg/256px-Taj-Mahal.jpg' alt='Taj Mahal' width='150px'/>";
+  "Taj Mahal, India<br/><img src='https://upload.wikimedia.org/wikipedia/commons/1/1d/Taj_Mahal_%28Edited%29.jpeg' alt='Taj Mahal' width='150px'/>";
 
 var customOptions = { maxWidth: "150", className: "custom" };
 
